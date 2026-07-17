@@ -21,13 +21,15 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.fetchUser(id);
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return userService.fetchUser(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/api/users")
-    public String createUser(@RequestBody User user) {
+    public ResponseEntity<String> createUser(@RequestBody User user) {
         userService.addUser(user);
-        return "User Added successfully";
+        return ResponseEntity.ok( "User Added successfully");
     }
 }
